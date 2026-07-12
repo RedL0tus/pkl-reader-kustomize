@@ -1,0 +1,9 @@
+// Generate CRD modules from a kustomize/krusty build
+
+amends "../pkl/convert-kustomize-crds.pkl"
+
+build {
+  repository = "https://github.com/kubernetes-sigs/gateway-api.git"
+  path = "config/crd"
+  ref = "v1.6.0"
+}

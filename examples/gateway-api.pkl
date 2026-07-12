@@ -1,0 +1,14 @@
+// Get YAML manifests
+
+import "../pkl/kustomize.pkl"
+
+build = new kustomize.Build {
+  repository = "https://github.com/kubernetes-sigs/gateway-api.git"
+  path = "config/crd"
+  ref = "v1.6.0"
+}
+
+output {
+  value = build.resources
+  renderer = new YamlRenderer {}
+}

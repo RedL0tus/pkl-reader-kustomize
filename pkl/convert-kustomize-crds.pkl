@@ -1,0 +1,58 @@
+module kustomize.convert_kustomize_crds
+
+import "pkl:yaml"
+
+import "@deepToTyped/deepToTyped.pkl"
+import "@k8s.contrib.crd/internal/ModuleGenerator.pkl"
+import "@k8s.contrib.crd/internal/SchemaGenerator.pkl"
+
+import "kustomize.pkl"
+
+k8sImportPath: String = "@k8s"
+baseApiGroup: String = "k8s.io"
+local baseApiGroupModulePrefix = baseApiGroup.split(".").reverse().join(".")
+generateSchema: Boolean = false
+converters: Mapping<String, Mapping<List<String>, Module | Class | TypeAlias>>?
+build: kustomize.Build
+logPaths: Boolean? = false
+
+local _crds: Listing<ModuleGenerator.CRD> = new {
+  for (manifest in build.resources) {
+    when (manifest.kind == "CustomResourceDefinition") {
+      deepToTyped.apply(ModuleGenerator.CRD, manifest) as ModuleGenerator.CRD
+    }
+  }
+}
+
+fixed modules: Listing<ModuleGenerator> = new {
+  for (_crd in _crds) {
+    for (_version in _crd.spec.versions) {
+      new ModuleGenerator {
+        k8sImportPath = module.k8sImportPath
+        crd = _crd
+        version = _version
+        converters = module.converters?.getOrNull(crd.metadata.name) ?? new Mapping {}
+        logPaths = false
+      }
+    }
+  }
+}
+
+fixed schema: SchemaGenerator = new {
+  k8sImportPath = module.k8sImportPath
+  crds = _crds
+  baseApiGroup = module.baseApiGroup
+}
+
+output {
+  text = throw("The JSON schema generator only works with multiple-file output.")
+  files {
+    when (generateSchema) {
+      ["k8sSchema.pkl"] = schema.moduleNode.output
+    }
+    for (mod in modules) {
+      ["\(mod.moduleName.replaceFirst(Regex(#"^\#(baseApiGroupModulePrefix)\."#), "").split(".").join("/")).pkl"] =
+        mod.moduleNode.output
+    }
+  }
+}

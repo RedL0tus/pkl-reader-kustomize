@@ -1,0 +1,64 @@
+@ModuleInfo { minPklVersion = "0.30.0" }
+@go.Package { name = "github.com/RedL0tus/pkl-reader-kustomize/internal/msg" }
+abstract module kustomize.kustomize
+
+import "pkl:pklbinary"
+import "pkl:semver"
+import "pkl:yaml"
+
+import "@deepToTyped/deepToTyped.pkl"
+import "@go/go.pkl"
+import "@k8s.contrib/convert.pkl"
+import "@k8s/K8sResource.pkl"
+import "@uri/URI.pkl"
+
+import "PklProject"
+
+hidden const readerName = "kustomize"
+
+local const packageVersion = PklProject.package.version
+
+abstract class Request {
+  fixed kind: String
+
+  local encodedRequest =
+    new pklbinary.Renderer {}
+      .renderValue(this)
+      .base64
+      .dropLastWhile((char) -> char == "=")
+      .replaceAll("+", "-")
+      .replaceAll("/", "_")
+  hidden fixed requestUri: URI = new {
+    scheme = "reader+kustomize"
+    path = "/"
+    query = "request=\(encodedRequest)&packageVersion=\(packageVersion)"
+  }
+}
+
+class Build extends Request {
+  fixed kind: String = "build"
+
+  // Build specification
+  repository: String?
+  path: String(!isEmpty)
+  ref: String?
+  submodules: Boolean?
+
+  hidden additionalCustomResources: Mapping<String, Mapping<String, K8sResource>>
+
+  hidden fixed text: String =
+    read?(requestUri.toString())?.text ?? throw("Failed to build kustomize manifests")
+  hidden fixed manifests = new yaml.Parser { useMapping = true }.parseAll(text) as List<Mapping?>
+
+  local converter = (convert) { customResourceTemplates = outer.additionalCustomResources }
+
+  hidden fixed resources: Mapping<String, K8sResource> = new {
+    for (manifest in manifests) {
+      when (manifest != null) {
+        ["\(manifest["apiVersion"])/\(manifest["kind"]):\(manifest["metadata"].getOrNull("namespace") ?? "")/\(manifest["metadata"]["name"])"] =
+          deepToTyped.apply(converter.getResourceTemplate(manifest).getClass(), manifest)
+            as K8sResource
+      }
+    }
+  }
+}

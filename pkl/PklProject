@@ -1,0 +1,39 @@
+amends "pkl:Project"
+
+dependencies {
+  ["uri"] {
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/pkl.experimental.uri@1.0.3"
+  }
+  ["go"] {
+    uri = "package://pkg.pkl-lang.org/pkl-go/pkl.golang@0.13.1"
+  }
+  ["k8s"] {
+    uri = "package://pkg.pkl-lang.org/pkl-k8s/k8s@1.4.1"
+  }
+  ["k8s.contrib"] {
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib@1.0.3"
+  }
+  ["deepToTyped"] {
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/pkl.experimental.deepToTyped@1.2.1"
+  }
+  ["k8s.contrib.crd"] {
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib.crd@4.2.2"
+  }
+}
+
+local repo = "github.com/RedL0tus/pkl-reader-kustomize"
+
+package {
+  name = "pkl-reader-kustomize"
+  version = "0.1.0"
+  baseUri = "package://pkg.pkl-lang.org/\(repo)"
+  packageZipUrl = "https://\(repo)/release/download/v\(version)/pkl-reader-kustomize.zip"
+  license = "Apache-2.0"
+  authors {
+    "Jiangjin Wang <the@salted.fish>"
+  }
+  description = "Pkl external reader that behaves like kustomize build"
+  issueTracker = "https://\(repo)/issues"
+  sourceCode = "https://\(repo)/tree/v\(version)/pkl"
+  sourceCodeUrlScheme = "https://\(repo)/blob/v\(version)/pkl%{path}#L%{line}-%{endLine}"
+}
