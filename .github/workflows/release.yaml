@@ -1,0 +1,42 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Pkl
+        id: setup-pkl
+        env:
+          PKL_VERSION: 0.32.0
+          PKL_FILENAME: pkl
+          PKL_DOWNLOAD_URL: https://github.com/apple/pkl/releases/download/0.32.0/pkl-linux-amd64
+        shell: bash
+        run: |-
+          DIR="$(mktemp -d /tmp/pkl-$PKL_VERSION-XXXXXX)"
+          PKL_EXEC="$DIR/$PKL_FILENAME"
+          curl -sfL -o $PKL_EXEC "$PKL_DOWNLOAD_URL"
+          chmod +x $PKL_EXEC
+          echo "$DIR" >> "$GITHUB_PATH"
+          echo "pkl_exec=$PKL_EXEC" >> "$GITHUB_OUTPUT"
+      - name: Check Pkl Formatting
+        run: pkl format --diff-name-only pkl
+      - name: Build Pkl Package
+        run: pkl project package pkl --output-path out/pkl-package
+      - name: Publish Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_WITH_VERSION: ${{ github.ref_name }}
+        run: |-
+          gh release create "${PACKAGE_WITH_VERSION}" \
+            --title "${PACKAGE_WITH_VERSION}" \
+            --verify-tag \
+            --notes "Release of ${PACKAGE_WITH_VERSION}" \
+            out/pkl-package/*
