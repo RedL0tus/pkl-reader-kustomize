@@ -2,7 +2,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'pkl-reader-kustomize@*'
 jobs:
   build:
     name: Create Release
