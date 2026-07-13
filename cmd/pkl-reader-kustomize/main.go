@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Version   = "0.1.1"
+	Version   = "0.1.2"
 	_, _, run = shared.New(shared.Spec{
 		SchemeSuffix: "kustomize",
 		Name:         "pkl-reader-kustomize",

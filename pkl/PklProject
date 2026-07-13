@@ -25,10 +25,10 @@ local repo = "github.com/RedL0tus/pkl-reader-kustomize"
 
 package {
   name = "pkl-reader-kustomize"
-  version = "0.1.1"
+  version = "0.1.2"
   baseUri = "package://pkg.pkl-lang.org/\(repo)"
   packageZipUrl =
-    "https://\(repo)/release/download/pkl-reader-kustomize@\(version)/pkl-reader-kustomize@\(version).zip"
+    "https://\(repo)/releases/download/pkl-reader-kustomize@\(version)/pkl-reader-kustomize@\(version).zip"
   license = "Apache-2.0"
   authors {
     "Jiangjin Wang <the@salted.fish>"
