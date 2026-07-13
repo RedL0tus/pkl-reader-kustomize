@@ -15,7 +15,7 @@ Install
 
 1. Build and install binary: `go install -v github.com/RedL0tus/pkl-reader-kustomize/cmd/pkl-reader-kustomize@v0.1.0`, make sure the binary exists in PATH.
 2. Update PklProject:
-  - Add `package://pkg.pkl-lang.org/github.com/RedL0tus/pkl-reader-kustomize@0.1.0` to dependencies.
+  - Add `package://pkg.pkl-lang.org/github.com/RedL0tus/pkl-reader-kustomize/pkl-reader-kustomize@0.1.0` to dependencies.
   - Update external reader settings:
   ```
   evaluatorSettings {

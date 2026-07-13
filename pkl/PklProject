@@ -27,7 +27,8 @@ package {
   name = "pkl-reader-kustomize"
   version = "0.1.0"
   baseUri = "package://pkg.pkl-lang.org/\(repo)"
-  packageZipUrl = "https://\(repo)/release/download/v\(version)/pkl-reader-kustomize@\(version).zip"
+  packageZipUrl =
+    "https://\(repo)/release/download/pkl-reader-kustomize@\(version)/pkl-reader-kustomize@\(version).zip"
   license = "Apache-2.0"
   authors {
     "Jiangjin Wang <the@salted.fish>"
