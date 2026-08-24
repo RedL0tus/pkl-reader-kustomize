@@ -16,7 +16,7 @@ import "PklProject"
 
 hidden const readerName = "kustomize"
 
-local const packageVersion = PklProject.package.version
+local const packageVersion = read("VERSION.txt").text.trim()
 
 abstract class Request {
   fixed kind: String

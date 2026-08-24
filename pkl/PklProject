@@ -25,7 +25,7 @@ local repo = "github.com/RedL0tus/pkl-reader-kustomize"
 
 package {
   name = "pkl-reader-kustomize"
-  version = "0.1.2"
+  version = read("VERSION.txt").text.trim()
   baseUri = "package://pkg.pkl-lang.org/\(repo)"
   packageZipUrl =
     "https://\(repo)/releases/download/pkl-reader-kustomize@\(version)/pkl-reader-kustomize@\(version).zip"
