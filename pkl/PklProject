@@ -2,22 +2,22 @@ amends "pkl:Project"
 
 dependencies {
   ["uri"] {
-    uri = "package://pkg.pkl-lang.org/pkl-pantry/pkl.experimental.uri@1.0.3"
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/pkl.experimental.uri@1.0.4"
   }
   ["go"] {
-    uri = "package://pkg.pkl-lang.org/pkl-go/pkl.golang@0.13.1"
+    uri = "package://pkg.pkl-lang.org/pkl-go/pkl.golang@0.13.2"
   }
   ["k8s"] {
     uri = "package://pkg.pkl-lang.org/pkl-k8s/k8s@1.4.1"
   }
   ["k8s.contrib"] {
-    uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib@1.0.3"
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib@2.0.0"
   }
   ["deepToTyped"] {
     uri = "package://pkg.pkl-lang.org/pkl-pantry/pkl.experimental.deepToTyped@1.2.1"
   }
   ["k8s.contrib.crd"] {
-    uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib.crd@4.2.2"
+    uri = "package://pkg.pkl-lang.org/pkl-pantry/k8s.contrib.crd@4.2.8"
   }
 }
 
